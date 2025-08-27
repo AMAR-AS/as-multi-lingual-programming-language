@@ -1,9 +1,9 @@
 #include "semantic.h"
 #include <iostream>
 
-// --------------------------------------------
-// Analyze the AST recursively
-// --------------------------------------------
+// -------------------------------------------------
+// Analyze AST Recursively
+// -------------------------------------------------
 void SemanticAnalyzer::analyze(ASTNode* root) {
     if (!root) return;
 
@@ -14,6 +14,7 @@ void SemanticAnalyzer::analyze(ASTNode* root) {
         }
 
         std::string var = root->children[0]->value;
+        std::string exprType;
 
         // Check if variable is declared
         if (!isDeclared(var)) {
@@ -21,65 +22,65 @@ void SemanticAnalyzer::analyze(ASTNode* root) {
             return;
         }
 
-        // Analyze expression (RHS)
+        // Analyze RHS expression
         checkExpression(root->children[1]);
-        std::string exprType = root->children[1]->nodeType;
+        exprType = root->children[1]->nodeType;
 
         // Validate assignment type
         checkAssignment(var, exprType);
     }
 
-    // Recursively analyze all children
+    // Recurse into children
     for (auto* child : root->children) {
         analyze(child);
     }
 }
 
-// --------------------------------------------
-// Variable Declaration
-// --------------------------------------------
+// -------------------------------------------------
+// Declare a new variable
+// -------------------------------------------------
 void SemanticAnalyzer::declareVariable(const std::string& name, const std::string& type) {
-    if (isDeclared(name)) {
-        std::cerr << "[Semantic Error] Variable '" << name << "' already declared.\n";
-        return;
-    }
     symbolTable[name] = {name, type};
 }
 
-// --------------------------------------------
-// Symbol Lookup
-// --------------------------------------------
+// -------------------------------------------------
+// Check if variable is declared
+// -------------------------------------------------
 bool SemanticAnalyzer::isDeclared(const std::string& name) {
     return symbolTable.find(name) != symbolTable.end();
 }
 
+// -------------------------------------------------
+// Get type of variable
+// -------------------------------------------------
 std::string SemanticAnalyzer::getType(const std::string& name) {
-    auto it = symbolTable.find(name);
-    if (it != symbolTable.end())
-        return it->second.type;
+    if (isDeclared(name))
+        return symbolTable[name].type;
     return "undefined";
 }
 
-// --------------------------------------------
-// Assignment Type Checking
-// --------------------------------------------
-void SemanticAnalyzer::checkAssignment(const std::string& name, const std::string& exprType) {
+// -------------------------------------------------
+// Validate assignment type
+// -------------------------------------------------
+void SemanticAnalyzer::checkAssignment(const std::string& name, const std::string& type) {
     std::string varType = getType(name);
-    if (varType != exprType && exprType != "undefined") {
-        std::cerr << "[Semantic Error] Type mismatch: cannot assign type '" << exprType
-                  << "' to variable '" << name << "' of type '" << varType << "'\n";
+    if (varType != type && type != "undefined") {
+        std::cerr << "[Semantic Error] Type mismatch: cannot assign " 
+                  << type << " to " << varType 
+                  << " variable '" << name << "'\n";
     }
 }
 
-// --------------------------------------------
-// Expression Type Inference
-// --------------------------------------------
+// -------------------------------------------------
+// Check expression type
+// -------------------------------------------------
 void SemanticAnalyzer::checkExpression(ASTNode* node) {
     if (!node) return;
 
     if (node->nodeType == "Identifier") {
         if (!isDeclared(node->value)) {
-            std::cerr << "[Semantic Error] Variable '" << node->value << "' not declared!\n";
+            std::cerr << "[Semantic Error] Variable '" 
+                      << node->value << "' not declared!\n";
             node->nodeType = "undefined";
         } else {
             node->nodeType = getType(node->value);
@@ -90,11 +91,5 @@ void SemanticAnalyzer::checkExpression(ASTNode* node) {
     }
     else if (node->nodeType == "String") {
         node->nodeType = "txt";
-    }
-    else {
-        // Recursively infer for children (expressions, binary ops, etc.)
-        for (auto* child : node->children) {
-            checkExpression(child);
-        }
     }
 }

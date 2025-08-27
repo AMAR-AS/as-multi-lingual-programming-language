@@ -1,19 +1,27 @@
 #ifndef IR_H
 #define IR_H
-#include "ast.h"
 
-#include "parser.h"
 #include <string>
 #include <vector>
+#include "ast.h"
 
+// -------------------------------------
+// IR Instruction Structure
+// -------------------------------------
 struct IRInstruction {
-    std::string op;                // e.g., "ADD", "MOV", "PRINT"
-    std::string arg1, arg2, result; // operands and result
+    std::string op;       // operation (MOV, ADD, SUB, etc.)
+    std::string arg1;     // first operand
+    std::string arg2;     // second operand
+    std::string result;   // destination / result
 };
 
+// -------------------------------------
+// IR Generator
+// -------------------------------------
 class IRGenerator {
 private:
     std::vector<IRInstruction> instructions;
+    int tempCounter = 0;  // for unique temporaries
 
 public:
     void generate(ASTNode* root);
@@ -21,4 +29,4 @@ public:
     std::vector<IRInstruction> getIR();
 };
 
-#endif
+#endif // IR_H
