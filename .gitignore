@@ -1,0 +1,41 @@
+# Build directories and generated files
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# Intermediate and object files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+
+# IDE-specific and OS artifacts
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.DS_Store
+Thumbs.db
+
+# Ask interpreter/VM cache (if any)
+.askcache/
+*.ask.icache
+
+# Logs, temporary files
+*.log
+*.tmp
+*~
+
+# Compiled Mapper or transpiler outputs
+*.pyc
+
+# Persistent build artifacts
+bin/
+out/
