@@ -1,13 +1,8 @@
-#ifndef CODEGEN_H
-#define CODEGEN_H
-
+#pragma once
 #include "ir.h"
 #include <vector>
-#include <string>
 
 class CodeGenerator {
 public:
-    std::string generate(const std::vector<IRInstruction>& ir);
+    std::vector<int> generate(const std::vector<IRInstruction>& ir);
 };
-
-#endif

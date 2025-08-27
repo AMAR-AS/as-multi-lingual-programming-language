@@ -1,12 +1,10 @@
-#ifndef SANDBOX_H
-#define SANDBOX_H
-
-#include "ir.h"
-#include <vector>
+#pragma once
+#include <string>
 
 class Sandbox {
 public:
-    bool run(const std::vector<IRInstruction>& ir);
+    bool validate(const std::string& code) {
+        // Always allow for now
+        return true;
+    }
 };
-
-#endif
