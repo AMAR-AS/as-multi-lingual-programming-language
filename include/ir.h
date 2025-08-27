@@ -1,5 +1,6 @@
 #ifndef IR_H
 #define IR_H
+#include "ast.h"
 
 #include "parser.h"
 #include <string>

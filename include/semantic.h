@@ -1,5 +1,6 @@
 #ifndef SEMANTIC_H
 #define SEMANTIC_H
+#include "ast.h"
 
 #include "parser.h"
 #include <string>
